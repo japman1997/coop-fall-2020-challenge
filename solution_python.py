@@ -6,6 +6,7 @@ class EventSourcer():
         self.index = None
         self.travlist = []
         self.tindex = None
+        self.check = False
         
 
     def add(self, num: int):
@@ -42,36 +43,50 @@ class EventSourcer():
         print(self.travlist,self.value,self.index,self.tindex)
 
     def undo(self):
-        self.tindex = self.tindex-1
-        self.value = self.travlist[self.tindex]
-        
-        print(self.travlist,self.value,self.index,self.tindex)
+        if self.index != None:
+            if self.tindex-1<0:
+                self.tindex = 0
+                print("Out of Range Undo, Undo at First Value")
+            else:
+                self.tindex = self.tindex-1     
+            self.value = self.travlist[self.tindex]
+            self.check=True
+            
+            print(self.travlist,self.value,self.index,self.tindex)
 
     def redo(self):
-        self.tindex = self.tindex+1
-        self.value = self.travlist[self.tindex]
-        
-        print(self.travlist,self.value,self.index,self.tindex)
+        if self.index != None:
+            if self.check == True:
+                if self.tindex+1>self.index:
+                    self.tindex = self.index
+                    print("Out of Range Redo, Redo at MAX")
+                else:
+                    self.tindex = self.tindex+1
+                self.value = self.travlist[self.tindex]
+            
+            print(self.travlist,self.value,self.index,self.tindex)
 
     def bulk_undo(self, steps: int):
-        if self.tindex+steps<0:
-            self.tindex = 0
-            print("Out of Range Undo, Undo at First Value")
-        else:
-            self.tindex = self.tindex-steps
-        self.value = self.travlist[self.tindex]
-        
-        print(self.travlist,self.value,self.index,self.tindex)
+        if self.index != None:
+            if self.tindex-steps<0:
+                self.tindex = 0
+                print("Out of Range Undo, Undo at First Value")
+            else:
+                self.tindex = self.tindex-steps
+            self.value = self.travlist[self.tindex]
+            
+            print(self.travlist,self.value,self.index,self.tindex)
 
     def bulk_redo(self, steps: int):
-        if self.tindex+steps>self.index:
-            self.tindex = self.index
-            print("Out of Range Redo, Redo at MAX")
-        else:
-            self.tindex = self.tindex+steps
-        self.value = self.travlist[self.tindex]
-        
-        print(self.travlist,self.value,self.index,self.tindex)
+        if self.index != None:
+            if self.tindex+steps>self.index:
+                self.tindex = self.index
+                print("Out of Range Redo, Redo at MAX")
+            else:
+                self.tindex = self.tindex+steps
+            self.value = self.travlist[self.tindex]
+            
+            print(self.travlist,self.value,self.index,self.tindex)
     
     def clear(self):
         self.value=0
