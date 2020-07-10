@@ -3,18 +3,18 @@ class EventSourcer():
 
     def __init__(self):
         self.value = 0
-        self.index = None
-        self.travlist = []
-        self.tindex = None
+        self.index = 0
+        self.travlist = [0]
+        self.tindex = 0
         self.check = False
         
 
     def add(self, num: int):
         self.value +=num
         
-        if self.index == None:
-            self.index = 0
-        elif self.index != self.tindex:
+        # if self.index == None:
+        #     self.index = 0
+        if self.index != self.tindex:
             self.index = self.tindex+1
             del self.travlist[self.index:]
         else:
@@ -29,9 +29,9 @@ class EventSourcer():
     def subtract(self, num: int):
         self.value-=num
         
-        if self.index == None:
-            self.index = 0
-        elif self.index != self.tindex:
+        # if self.index == None:
+        #     self.index = 0
+        if self.index != self.tindex:
             self.index = self.tindex+1
             del self.travlist[self.index:]
         else:
@@ -43,7 +43,7 @@ class EventSourcer():
         print(self.travlist,self.value,self.index,self.tindex)
 
     def undo(self):
-        if self.index != None:
+        if self.index > 0:
             if self.tindex-1<0:
                 self.tindex = 0
                 print("Out of Range Undo, Undo at First Value")
@@ -55,7 +55,7 @@ class EventSourcer():
             print(self.travlist,self.value,self.index,self.tindex)
 
     def redo(self):
-        if self.index != None:
+        if self.index > 0:
             if self.check == True:
                 if self.tindex+1>self.index:
                     self.tindex = self.index
@@ -67,7 +67,7 @@ class EventSourcer():
             print(self.travlist,self.value,self.index,self.tindex)
 
     def bulk_undo(self, steps: int):
-        if self.index != None:
+        if self.index >0:
             if self.tindex-steps<0:
                 self.tindex = 0
                 print("Out of Range Undo, Undo at First Value")
@@ -78,7 +78,7 @@ class EventSourcer():
             print(self.travlist,self.value,self.index,self.tindex)
 
     def bulk_redo(self, steps: int):
-        if self.index != None:
+        if self.index >0:
             if self.tindex+steps>self.index:
                 self.tindex = self.index
                 print("Out of Range Redo, Redo at MAX")
@@ -90,9 +90,9 @@ class EventSourcer():
     
     def clear(self):
         self.value=0
-        if self.index == None:
-            self.index = 0
-        elif self.index != self.tindex:
+        # if self.index == None:
+        #     self.index = 0
+        if self.index != self.tindex:
             self.index = self.tindex+1
             del self.travlist[self.index:]
         else:
